@@ -18,6 +18,11 @@ class Block:
         self.data = data
         self.hash = hash
 
+def BlockHash(data:Data, block:Block=None):
+    encoded = str(block.prevHash).encode()
+    encoded += data.data.encode() + str(data.time).encode()
+    return hashlib.sha256(encoded)
+
 def hash(data:Data):
     encoded = data.data.encode() + str(data.time).encode()
     return hashlib.sha256(encoded)
@@ -30,10 +35,9 @@ if __name__ == "__main__":
     block = Block(data=Genesis, hash=hash(Genesis))
     transactions += [block]
     for d in data:
-        block = Block(prevHash=transactions[i-1], data=d, hash=hash(d))
+        block = Block(prevHash=transactions[i-1], data=d, hash=BlockHash(d, transactions[i-1]))
         transactions += [block]
         i += 1
-
     #Print Transactions
     print(f'[{transactions[0].prevHash}, {transactions[0].data.data}, {transactions[0].data.time}, {transactions[0].hash}]', end='')
     for i in range(1, len(transactions)):
