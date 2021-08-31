@@ -1,7 +1,7 @@
 /*
     Note Before running this cpp program please
     run server.py using python as hashes are created
-    in the server side
+    on the server side
 */
 
 #include<iostream>
