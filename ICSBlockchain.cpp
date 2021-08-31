@@ -30,6 +30,7 @@ class Node
             for(auto data : *recvdDataHashes)
                 cout<<data<<'\n';
         }
+        void *x;
 };
 
 int main()
@@ -57,7 +58,6 @@ int main()
         int n = recvfrom(fd, &hash, sizeof(hash), 0, (sockaddr*)&saddr, (socklen_t*)&len);
         hash[n] = '\0';
         recvdDataHash->push_back(hash);
-        
         center.print();
     }
     return 0;
