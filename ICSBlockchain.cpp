@@ -2,6 +2,11 @@
     Note Before running this cpp program please
     run server.py using python as hashes are created
     on the server side
+    commands are
+    1. add source : adds a small scale power generation center
+    2. add transaction : adds a transaction for the source
+    3. print : prints hashes of all the intial transactions of the source
+    4. exit : exit
 */
 
 #include<iostream>
@@ -105,6 +110,7 @@ int main()
             string transaction = "sent:" + sent + " recv:" + recv + " ID:"+ to_string(id);
             strcpy(str, (char*)&transaction[0]);
             sendto(fd, str, strlen(str), 0, (sockaddr*)&saddr, len);
+            cout<<"Transaction: "<<transaction<<'\n';
             int n = recvfrom(fd, hash, sizeof(hash), 0, (sockaddr*)&saddr, (socklen_t*)&len);
             hash[n] = '\0';
             ptr = new Node(mapByPos[id], id);
