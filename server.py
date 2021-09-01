@@ -8,7 +8,7 @@ if __name__ == '__main__':
     host = '127.0.0.1'
     port = 1025
     try:
-        ssocket = soc.socket(family=soc.AF_INET, type = soc.SOCK_DGRAM, proto=0)
+        ssocket = soc.socket(family=soc.AF_INET, type=soc.SOCK_DGRAM, proto=0)
     except soc.error as err:
         print(f"socket creation failed with error {err}")
     ssocket.bind((host, port))
