@@ -1,6 +1,6 @@
 /*
     Note Before running this cpp program please
-    run server.py using python as hashes are created
+    run server.py using python3 as hashes are created
     on the server side
     commands are
     1. add source : adds a small scale power generation center
