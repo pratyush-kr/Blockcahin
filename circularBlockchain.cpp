@@ -1,3 +1,5 @@
+//run server.py using python
+
 #include<iostream>
 #include<ctime>
 #include<vector>
