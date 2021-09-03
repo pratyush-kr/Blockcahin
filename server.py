@@ -12,7 +12,7 @@ if __name__ == '__main__':
     except soc.error as err:
         print(f"socket creation failed with error {err}")
     ssocket.bind((host, port))
-    print('Socket is listining')
+    print('Socket is listening')
     while True:
         data, addr = ssocket.recvfrom(1025)
         print("Sending Hash...")

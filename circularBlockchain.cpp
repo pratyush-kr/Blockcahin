@@ -51,10 +51,6 @@ class Block
             data = "";
             timeStamp = "";
         }
-        void changeData(string prevHash)
-        {
-            //
-        }
 };
 
 class Blockchain : public Block
@@ -62,8 +58,9 @@ class Blockchain : public Block
     private:
         vector<Block*> blocks;
     public:
-        void createChain(string data[], int n)
+        void createChain(vector<string> data)
         {
+            int n = data.size();
             blocks.push_back(new Block(data[0]));
             for(int i=1; i<n; i++)
                 blocks.push_back(new Block(data[i], blocks[i-1]));
@@ -74,20 +71,45 @@ class Blockchain : public Block
             for(int i=0; i<blocks.size(); i++)
                 blocks[i]->printBlock();
         }
-        void changeData(string prevHash)
-        {
-            //
-        }
 };
-
 
 int main()
 {
-    Blockchain b1;
-    int n = 5;
-    string data[n] = {"hello", "world", "its", "circular", "blockchain"};
-    b1.createChain(data, n);
-    b1.printChain();
+    Blockchain *b1 = NULL;
+    vector<string> *data = NULL;
+    string str;
+    string command;
+    while(1)
+    {
+        cout<<"command: ";
+        getline(cin, command);
+        if(command == "exit")
+            break;
+        else if(command == "new")
+        {
+            if(data != NULL) delete data;
+            data = new vector<string>;
+            int n;
+            cout<<"n: ";
+            cin>>n;
+            cin.ignore();
+            for(int i=0; i<n; i++)
+            {
+                cout<<"Data: ";
+                getline(cin, str);
+                data->push_back(str);
+            }
+            b1 = new Blockchain();
+            b1->createChain(*data);
+        }
+        else if(command == "print chain")
+        {
+            if(b1 != NULL)
+                b1->printChain();
+            else
+                printf("No Blockchain to print\n");
+        }
+    }
     return 0;
 }
 
