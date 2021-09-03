@@ -49,6 +49,10 @@ class Block
             data = "";
             timeStamp = "";
         }
+        void changeData(string prevHash)
+        {
+            //
+        }
 };
 
 class Blockchain : public Block
@@ -67,6 +71,10 @@ class Blockchain : public Block
         {
             for(int i=0; i<blocks.size(); i++)
                 blocks[i]->printBlock();
+        }
+        void changeData(string prevHash)
+        {
+            //
         }
 };
 
@@ -91,7 +99,7 @@ string Block::generateHash(string data)
     char hash[255];
     char str[255];
     int len = sizeof(saddr);
-    strcpy(str, (char*)&data[0]);
+    strcpy(str, data.c_str());
     sendto(fd, str, strlen(str), 0, (sockaddr*)&saddr, len);
     int n = recvfrom(fd, hash, sizeof(hash), 0, (sockaddr*)&saddr, (socklen_t*)&len);
     hash[n] = '\0';
