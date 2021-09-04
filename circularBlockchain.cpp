@@ -9,9 +9,20 @@
 #include<unistd.h>
 #include<cstring>
 
+/*
+    The basic Idea here is to make even the last Block safe,
+    So that if any one starts an at attack at any Block other blocks can
+    recognise that and override the system thereby failing the attack
+    this is achived using circular Blockchain as the hash of last is stored
+    in the prev hash of genesis block so even if someone try to change the data of
+    last block they just can't. I have used OOPS in such a way so that certain functions are
+    hidden from the scope of user and the Blockchain can use certain function only once there by
+    making it more secure.
+*/
+
 using namespace std;
 
-class Block
+class Block //Each node(controller in this case is a Block in the Blockchain)
 {
     private:
         string prevHash;
@@ -19,9 +30,14 @@ class Block
         string data;
         string timeStamp;
     protected:
+    /*
+        I am hiding this function from the scope of user to be used only
+        once in the scope of all the program while creating the chain.
+        ensures that this function by any one else except the admin.
+    */
         string generateHash(string);
     public:
-        Block(string data)
+        Block(string data) //this is used to create a genesis block
         {
             time_t timestamp = time(0);
             timeStamp = ctime(&timestamp);
@@ -29,7 +45,8 @@ class Block
             this->data = data;
             ownHash = generateHash(data + prevHash + timeStamp);
         }
-        Block(string data, Block* block)
+        Block(string data, Block* block) //any other block can be generated using this
+        //the 2nd arg contain the previous block itself
         {
             time_t timestamp = time(0);
             timeStamp = ctime(&timestamp);
@@ -37,13 +54,16 @@ class Block
             this->data = data;
             ownHash = generateHash(data + prevHash + timeStamp);
         }
+        //this function is used to put the prev hash in genesis block
         void putPrevHash(string hash){prevHash = hash;}
+        //return Own Hash
         string giveHash()
         {return ownHash;}
         void printBlock()
         {
             printf("{%s %s %s %s}\n", prevHash.c_str(), data.c_str(), timeStamp.c_str(), ownHash.c_str());
         }
+        //Defining a default constructor to define ghost genesis block
         Block()
         {
             prevHash = "";
@@ -56,9 +76,10 @@ class Block
 class Blockchain : public Block
 {
     private:
-        vector<Block*> blocks;
+        vector<Block*> blocks; //contains all the Block which we are gonna use to store data
+        //in real world example this block does not exists
     public:
-        void createChain(vector<string> data)
+        void createChain(vector<string> data) //creates the whole chain using the data vector
         {
             int n = data.size();
             blocks.push_back(new Block(data[0]));
@@ -75,8 +96,9 @@ class Blockchain : public Block
 
 int main()
 {
-    Blockchain *b1 = NULL;
-    vector<string> *data = NULL;
+    Blockchain *b1 = NULL; //Taking a pointer because i dont think
+    //I can change any data once created
+    vector<string> *data = NULL; //this will store the data for different blocks
     string str;
     string command;
     while(1)
@@ -113,7 +135,8 @@ int main()
     return 0;
 }
 
-string Block::generateHash(string data)
+string Block::generateHash(string data) //It send the string to the server.py and recieves
+//a hash of the data
 {
     sockaddr_in saddr;
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
