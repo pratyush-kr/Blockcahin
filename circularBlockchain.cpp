@@ -13,10 +13,10 @@
     The basic Idea here is to make even the last Block safe,
     So that if any one starts an at attack at any Block other blocks can
     recognise that and override the system thereby failing the attack
-    this is achived using circular Blockchain as the hash of last is stored
-    in the prev hash of genesis block so even if someone try to change the data of
+    this is achived using circular Blockchain as the ownHash of last is stored
+    in the prevHash of genesis block so even if someone try to change the data of
     last block they just can't. I have used OOPS in such a way so that certain functions are
-    hidden from the scope of user and the Blockchain can use certain function only once there by
+    hidden from the scope of user and the class Blockchain can use these function only once there by
     making it more secure.
 */
 
@@ -26,24 +26,26 @@ class Block //Each node(controller in this case is a Block in the Blockchain)
 {
     private:
         string prevHash;
-        string ownHash;
         string data;
         string timeStamp;
+        string ownHash;
     protected:
     /*
-        I am hiding this function from the scope of user to be used only
-        once in the scope of all the program, i.e while creating the chain.
-        This ensures that this function by any one else except the admin when creating a block.
+        I am hiding these function from the scope of user to be used only
+        once in the scope of Blockchain class, i.e while creating the chain.
+        This ensures that this function cannot be used by any one else
+        except the admin when creating a Blockchain.
     */
         string generateHash(string);
+        void putPrevHash(Block *block, string hash){block->prevHash = hash;}
     public:
         Block(string data) //this is used to create a genesis block
         {
             time_t timestamp = time(0);
-            timeStamp = ctime(&timestamp);
+            timeStamp = ctime(&timestamp); //it creates a time stamp in 'day mmm dd hh:mm:ss yyyy'
             prevHash = "";
             this->data = data;
-            ownHash = generateHash(data + prevHash + timeStamp);
+            ownHash = generateHash(prevHash + data + timeStamp);
         }
         Block(string data, Block* block) //any other block can be generated using this
         //the 2nd arg contain the previous block itself
@@ -52,13 +54,11 @@ class Block //Each node(controller in this case is a Block in the Blockchain)
             timeStamp = ctime(&timestamp);
             prevHash = block->ownHash;
             this->data = data;
-            ownHash = generateHash(data + prevHash + timeStamp);
+            ownHash = generateHash(prevHash + data + timeStamp);
         }
         //this function is used to put the prev hash in genesis block
-        void putPrevHash(string hash){prevHash = hash;}
         //return Own Hash
-        string giveHash()
-        {return ownHash;}
+        string giveHash(){return ownHash;}
         void printBlock()
         {
             printf("{%s %s %s %s}\n", prevHash.c_str(), data.c_str(), timeStamp.c_str(), ownHash.c_str());
@@ -85,7 +85,7 @@ class Blockchain : public Block
             blocks.push_back(new Block(data[0]));
             for(int i=1; i<n; i++)
                 blocks.push_back(new Block(data[i], blocks[i-1]));
-            blocks[0]->putPrevHash(blocks[n-1]->giveHash());
+            putPrevHash(blocks[0], blocks[n-1]->giveHash());
         }
         void printChain()
         {
@@ -97,8 +97,8 @@ class Blockchain : public Block
 int main()
 {
     Blockchain *b1 = NULL; //Taking a pointer because i dont think
-    //I can change any data once created
-    vector<string> *data = NULL; //this will store the data for different blocks
+    //I can change any data once created so destroy the chain each time new data is to be inserted.
+    vector<string> *data = NULL; //this will store the data for different blocks acting as an array
     string str;
     string command;
     while(1)
@@ -135,8 +135,8 @@ int main()
     return 0;
 }
 
-string Block::generateHash(string data) //It send the string to the server.py and recieves
-//a hash of the data
+string Block::generateHash(string data) //It sends the string to the server.py and recieves
+//a hash of the string
 {
     sockaddr_in saddr;
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
