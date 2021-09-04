@@ -32,8 +32,8 @@ class Block //Each node(controller in this case is a Block in the Blockchain)
     protected:
     /*
         I am hiding this function from the scope of user to be used only
-        once in the scope of all the program while creating the chain.
-        ensures that this function by any one else except the admin.
+        once in the scope of all the program, i.e while creating the chain.
+        This ensures that this function by any one else except the admin when creating a block.
     */
         string generateHash(string);
     public:
