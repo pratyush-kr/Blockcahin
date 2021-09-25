@@ -39,24 +39,13 @@ int main(int argc, char *argv[])
     else ownHash.destination = client+1;
     while(1)
     {
-        if(client == 0)
-        {
-            send(fd, &ownHash, sizeof(Hash), 0);
-            recv(fd, &prevHash, sizeof(Hash), 0);
-            printf("%s\n", prevHash.hash);
-            prevHash.check = process(prevHash.hash);
-            prevHash.destination = clientCount-1;
-            send(fd, &prevHash, sizeof(Hash), 0);
-        }
-        else
-        {
-            recv(fd, &prevHash, sizeof(Hash), 0);
-            printf("%s\n", prevHash.hash);
-            send(fd, &ownHash, sizeof(Hash), 0);
-            prevHash.check = process(prevHash.hash);
-            prevHash.destination = client-1;
-            send(fd, &prevHash, sizeof(Hash), 0);
-        }
+        send(fd, &ownHash, sizeof(Hash), 0);
+        recv(fd, &prevHash, sizeof(Hash), 0);
+        prevHash.check = process(prevHash.hash);
+        if(client == 0) prevHash.destination = clientCount-1;
+        else prevHash.destination = client-1;
+        printf("Sending Preveious Hash to %d\n", prevHash.destination);
+        send(fd, &prevHash, sizeof(Hash), 0);
     }
     return 0;
 }

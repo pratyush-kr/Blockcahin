@@ -21,7 +21,6 @@ void populateAddress(sockaddr_in &addr, const int);
 
 int main(int argc, char *argv[])
 {
-    //1st argv is port no and 2nd argv is number of clients
     int n;
     printf("Number of Clients: ");
     scanf(" %d", &n);
@@ -51,11 +50,11 @@ int main(int argc, char *argv[])
     Hash h[n];
     while(1)
     {
-        recv(id[i%n], &h[i%n], sizeof(Hash), 0);
+        for(int j=0; j<n; j++)
+            recv(id[j], &h[j], sizeof(Hash), 0);
         printf("Hash Recieved\n");
-        send(id[h[i%n].destination], &h, sizeof(h), 0);
-        printf("Hash sent to client %d\n", h[i%n].destination);
-        i++;
+        for(int j=0; j<n; j++)
+            send(id[h[j].destination], &h[j], sizeof(Hash), 0);
     }
     return 0;
 }
