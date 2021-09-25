@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
         if(client == 0)
         {
             send(fd, &ownHash, sizeof(Hash), 0);
-            printf("Hash sent\n");
             recv(fd, &prevHash, sizeof(Hash), 0);
+            printf("%s\n", prevHash.hash);
             prevHash.check = process(prevHash.hash);
             prevHash.destination = clientCount-1;
             send(fd, &prevHash, sizeof(Hash), 0);
