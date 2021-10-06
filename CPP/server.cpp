@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     {
         for(int j=0; j<n; j++)
             recv(id[j], &h[j], sizeof(Hash), 0);
-        printf("Hash Recieved\n");
+        printf("Hashes Recieved\n");
         for(int j=0; j<n; j++)
             send(id[h[j].destination], &h[j], sizeof(Hash), 0);
     }

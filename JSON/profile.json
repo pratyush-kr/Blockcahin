@@ -1,0 +1,12 @@
+{
+    "1" : {
+            "firstname" : "Pratyush",
+            "lastname" : "Kumar",
+            "age" : 22
+        },
+    "2" : {
+            "firstname" : "Srishti",
+            "lastname" : "Jaiswal",
+            "age" : 25
+        }    
+}
