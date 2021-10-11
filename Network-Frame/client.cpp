@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     sockaddr_in saddr;
     populate(saddr, pno);
     int len = sizeof(saddr);
-    int fd = socket(AF_INET, SOCK_STREAM, 1); //creating a socket
+    int fd = socket(AF_INET, SOCK_STREAM, 0); //creating a socket
     if(fd < 0) {perror("Socket Creation Failed\n");}
     //bind is handeled by OS
 
