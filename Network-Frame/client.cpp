@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     int fd = socket(AF_INET, SOCK_STREAM, 0); //creating a socket
     if(fd < 0) {perror("Socket Creation Failed\n");}
     //bind is handeled by OS
-
+    if(connect(fd, (sockaddr*)&saddr, len) < 0) {perror("Connection Failed\n");}
     return 0;
 }
 
