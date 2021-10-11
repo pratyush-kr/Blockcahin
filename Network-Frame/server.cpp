@@ -35,6 +35,29 @@ int main(int argc, char *argv[])
     sockaddr_in saddr, caddr;
     int pno = stoi(argv[1]);
     populate(saddr, pno);
+    int len = sizeof(saddr);
+    if(bind(fd, (sockaddr*)&saddr, len) < 0) {perror("Bind Failed\n");}
+    int clients = stoi(argv[2]);
+    int id[clients];
+    listen(fd, clients);
+    for(int i=0; i<clients; i++)
+        id[i] = accept(fd, (sockaddr*)&caddr, (socklen_t*)&len);
+    Block rec[clients], sen[clients];
+    while(1)
+    {
+        cout<<"Reciving Hash:\n";
+        for(int i=0; i<clients; i++)
+        {
+            printf("s<-%d\n", i);
+            recv(id[i], &rec[i], sizeof(Block), 0);
+        }
+        cout<<"Sending Hash to destinations:\n";
+        for(int i=0; i<clients; i++)
+        {
+            printf("%d->%d\n", i, rec[i].destination);
+            send(id[rec[i].destination], &rec[i], sizeof(rec[i]), 0);
+        }
+    }
     return 0;
 }
 

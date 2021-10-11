@@ -27,7 +27,7 @@ struct Block
 };
 
 void populate(sockaddr_in &, const int);
-int validate(Block &A, const Block &B);
+void validate(Block &A, const Block &B);
 
 int main(int argc, char *argv[])
 {
@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
     if(connect(fd, (sockaddr*)&saddr, len) < 0) {perror("Connection Failed\n");}
     char ID;
     string prevHash, ownHash, data;
-    cout<<"ID: ";
-    cin>>ID;
+    ID = stoi(argv[1]);
     cout<<"PrevHash: ";
     cin>>prevHash;
     cout<<"OwnHash: ";
@@ -50,7 +49,6 @@ int main(int argc, char *argv[])
     cout<<"Data: ";
     cin>>data;
     Block B(ID, prevHash, data, ownHash);
-    B.ID = stoi(argv[1]);
     B.destination = stoi(argv[2]);
     Block R;
     while(1)
@@ -73,4 +71,14 @@ void populate(sockaddr_in &addr, const int pno)
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(pno);
+}
+
+void validate(Block &A, const Block &B)
+{
+    if(A.ownHash == B.prevHash)
+    {
+        A.validate = 1;
+        return;
+    }
+    A.validate = 0;
 }
