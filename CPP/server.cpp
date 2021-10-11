@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 {
     int n;
     printf("Number of Clients: ");
-    scanf(" %d", &n);
+    n = argc-1;
+    printf("%d\n", n);
     int id[n];
     char buffer[255];
     sockaddr_in saddr, caddr;
