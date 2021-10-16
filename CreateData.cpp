@@ -18,7 +18,7 @@ int main()
     current = power*1000/voltage;
     printf("Current: %.2f A\n", current);
     thread th1(foo, voltage, current, power);
-    sleep(5);
+    sleep(30);
     cout<<"Interupting\n";
     interupt = true;
     th1.join();
