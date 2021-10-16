@@ -5,7 +5,7 @@
 
 using namespace std;
 
-volatile bool interupt = false;
+volatile bool interrupt = false;
 
 void foo(volatile float v, volatile float i, volatile float p);
 
@@ -18,35 +18,47 @@ int main()
     current = power*1000/voltage;
     printf("Current: %.2f A\n", current);
     thread th1(foo, voltage, current, power);
-    sleep(30);
-    cout<<"Interupting\n";
-    interupt = true;
+    while(true)
+    {
+        int br;
+        sleep(15);
+        cout<<"Interrupting\n";
+        interrupt = true;
+        cout<<"Break?: ";
+        cin>>br;
+        if(br == 1)
+            break;
+    }
     th1.join();
     return 0;
 }
 
 void foo(volatile float v, volatile float i, volatile float p)
 {
-    fstream file("NewData.csv", ios::app);
+    fstream file("NewData.csv", ios::out);
     file<<"Voltage, Current, Power\n";
-    while(1)
+    bool cont = true;
+    while(cont)
     {
         float power, voltage, current;
-        while(!interupt)
+        while(!interrupt)
         {
             file<<v<<','<<i<<','<<p<<'\n';
             usleep(100000);
         }
         cout<<"Continue: ";
-        cin>>power;
-        if(power > 1)
+        cin>>cont;
+        if(cont == 1)
         {
             cout<<"Power: ";
             cin>>power;
             cout<<"Voltage: ";
             cin>>voltage;
             current = power*1000/voltage;
-            interupt = false;
+            v = voltage;
+            p = power;
+            i = current;
+            interrupt = false;
         }
     }
     cout<<"Interupt = "<<true<<'\n';
