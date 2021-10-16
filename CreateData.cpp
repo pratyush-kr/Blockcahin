@@ -27,12 +27,27 @@ int main()
 
 void foo(volatile float v, volatile float i, volatile float p)
 {
-    fstream file("NewData.csv");
+    fstream file("NewData.csv", ios::app);
     file<<"Voltage, Current, Power\n";
-    while(!interupt)
+    while(1)
     {
-        file<<v<<','<<i<<','<<p<<'\n';
-        usleep(100000);
+        float power, voltage, current;
+        while(!interupt)
+        {
+            file<<v<<','<<i<<','<<p<<'\n';
+            usleep(100000);
+        }
+        cout<<"Continue: ";
+        cin>>power;
+        if(power > 1)
+        {
+            cout<<"Power: ";
+            cin>>power;
+            cout<<"Voltage: ";
+            cin>>voltage;
+            current = power*1000/voltage;
+            interupt = false;
+        }
     }
     cout<<"Interupt = "<<true<<'\n';
 }
