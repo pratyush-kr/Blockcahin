@@ -62,4 +62,5 @@ void foo(volatile float v, volatile float i, volatile float p)
         }
     }
     cout<<"Interupt = "<<true<<'\n';
+    file.close();
 }
